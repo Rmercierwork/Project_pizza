@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <script src="/js/pizza.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <title>Pizzas management</title>
+</head>
+<body>
+    <div id="app">
+        <div class="pizza-list">
+            <div v-for="pizza in pizzas">
+                <div>{{pizza.label}}</div>
+                <div v-if="pizza.ingredients">
+                    Number of ingredients :
+                    {{pizza.ingredients ? pizza.ingredients.length : 0}}
+                </div>
+            </div>
+            <div>
+                <button v-on:click="create = true; newPizza = {}">
+                    Add new pizza</button>
+            </div>
+        </div>
+        <div class="pizza-form" v-if="create">
+            <div>
+                Pizza name<br>
+                <input v-model="newPizza.label">
+            </div>
+            <div>
+                Ingredients :
+                <span v-if="newPizza.ingredients" v-for="ingredient in newPizza.ingredients">
+                    {{ingredient.label}}
+                </span><br>
+                <select v-model="newIngredient" v-on:change="addIngredient()">
+                    <option></option>
+                    <option v-for="ingredient in ingredients" v-bind:value="ingredient">
+                        {{ingredient.label}}
+                    </option>
+                </select>
+            </div>
+            <div>
+                <button v-on:click="createPizza">
+                    Submit pizza
+                </button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
