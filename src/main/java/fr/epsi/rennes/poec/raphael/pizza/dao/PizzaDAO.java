@@ -54,9 +54,9 @@ public class PizzaDAO {
 
     public List<Pizza> getAllPizzas() {
         String sql ="SELECT " +
-                    "pizza.id AS pizzaId, " +
-                    "pizza.label AS pizzaLabel, "+
-                    "GROUP_CONCAT(ingredient.id, ingredient.label) AS ingredient "+
+                    "pizza.id as pizzaId, " +
+                    "pizza.label as pizzaLabel, "+
+                    "GROUP_CONCAT(ingredient.id) AS ingredients "+
                     "FROM pizza " +
                     "RIGHT JOIN pizza_has_ingredient ON pizza_has_ingredient.pizza_id = pizza.id " +
                     "LEFT JOIN ingredient ON pizza_has_ingredient.ingredient_id = ingredient.id " +
