@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
-import javax.swing.plaf.nimbus.State;
 import java.sql.*;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -29,7 +28,7 @@ public class CartDAO {
             ps.setInt(1, cartId);
             ps.setInt(2, pizza.getId());
 
-            ps.executeQuery();
+            ps.executeUpdate();
 
         } catch (SQLException e) {
             throw new TechnicalException(e);
@@ -59,7 +58,7 @@ public class CartDAO {
             String date = LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME);
             ps.setString(1, date);
 
-            ps.executeQuery();
+            ps.executeUpdate();
 
             ResultSet rs = ps.getGeneratedKeys();
             if (rs.next()) {

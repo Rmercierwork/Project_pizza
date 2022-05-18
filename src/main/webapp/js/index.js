@@ -11,6 +11,11 @@ var app = new Vue({
             .then(response => {
                 this.pizzas = response.data.data;
             });
+        let cartId = localStorage.getItem('cart.id');
+        axios.get('/public/cart?cartId=' + cartId)
+            .then(response => {
+                this.cart = response.data.data;
+            })
     },
     methods: {
         addPizza(pizza) {
