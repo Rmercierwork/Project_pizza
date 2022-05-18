@@ -107,4 +107,8 @@ public class CartDAO {
             throw new TechnicalException(e);
         }
     }
+
+    public void removePizza(int cartId, int id) {
+
+    }
 }

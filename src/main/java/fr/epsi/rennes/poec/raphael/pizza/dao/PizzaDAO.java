@@ -1,5 +1,6 @@
 package fr.epsi.rennes.poec.raphael.pizza.dao;
 
+import fr.epsi.rennes.poec.raphael.pizza.domain.Cart;
 import fr.epsi.rennes.poec.raphael.pizza.domain.Ingredient;
 import fr.epsi.rennes.poec.raphael.pizza.domain.Pizza;
 import fr.epsi.rennes.poec.raphael.pizza.exception.TechnicalException;
@@ -85,6 +86,93 @@ public class PizzaDAO {
                 pizzas.add(pizza);
             }
             return pizzas;
+        } catch (SQLException e) {
+            throw new TechnicalException(e);
+        }
+    }
+
+    public Pizza getPizzaById(int pizzaId) {
+        String sql ="SELECT" +
+                        "pizza.id as id, " +
+                        "pizza.label as label, " +
+                        "GROUP_CONCAT(ingredient.id, ':', ingredient.label, ':' ingredient.price) as ingredients " +
+                    "FROM pizza " +
+                    "JOIN pizza_has_ingredient " +
+                    "ON pizza_has_ingredient.pizza_id = pizza.id " +
+                    "JOIN ingredient " +
+                    "ON ingredient.id = pizza_has_ingredient.ingredient_id " +
+                    "WHERE pizza.id = ? " +
+                    "GROUP BY pizza.id";
+        try (
+                Connection conn = ds.getConnection();
+                PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, pizzaId);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                Pizza pizza = new Pizza();
+                pizza.setId(rs.getInt("id"));
+                pizza.setLabel(rs.getString("label"));
+                pizza.setIngredients(new ArrayList<>());
+
+                String ingredientsString = rs.getString("ingredients");
+                if (ingredientsString != null && ingredientsString.length() > 0) {
+                    String[] ingredientsTab = ingredientsString.split(",");
+                    for (String ingredient : ingredientsTab) {
+                        String[] colonnes = ingredient.split("\\:");
+                        Ingredient ingredientPojo = new Ingredient();
+                        ingredientPojo.setId(Integer.parseInt(colonnes[0]));
+                        ingredientPojo.setLabel(colonnes[1]);
+                        ingredientPojo.setPrice(Double.parseDouble(colonnes[2]));
+
+                        pizza.getIngredients().add(ingredientPojo) ;
+                    }
+                } return pizza;
+            } return null;
+
+        } catch (SQLException e) {
+            throw new TechnicalException(e);
+        }
+    }
+
+    public Cart getCartById(int cartId) {
+        String sql = "select " +
+                "cart.id as panierId, " +
+                "cart.date as panierDate, " +
+                "group_concat(pizza.id) as pizzas " +
+                "from cart " +
+                "right join cart_has_pizza " +
+                "on cart_has_pizza.cart_id = cart.id " +
+                "left join pizza " +
+                "on cart_has_pizza.pizza_id = pizza.id " +
+                "where cart.id = ? " +
+                "group by cart.id";
+        try (Connection conn = ds.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, cartId);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                Cart cart = new Cart();
+                cart.setId(rs.getInt("cartId"));
+
+                cart.setPizzas(new ArrayList<>());
+                String pizzas = rs.getString("pizzas");
+                if (pizzas == null || pizzas.length() == 0) {
+                    return cart;
+                }
+
+                for (String pizzaId : pizzas.split(",")) {
+                    Pizza pizza = new Pizza();
+                    pizza.setId(Integer.parseInt(pizzaId));
+
+                    cart.getPizzas().add(pizza);
+                }
+                return cart;
+            }
+            return null;
+
         } catch (SQLException e) {
             throw new TechnicalException(e);
         }

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:v-on="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <script src="/js/cart.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <title>Cart</title>
+</head>
+<body>
+    <div id="app">
+        <div class="cart-list">
+            List of pizzas inside your cart :
+            {{}}
+            <div class="cart-item" v-for="cart in cart.pizzas">
+                {{cart.date}}<br>
+                Number of pizzas :
+                {{cart.pizzas.length}}<br>
+                <button v-on:click="removeOnePizza(pizza)">Remove one</button>
+                <button v-on:click="removeAllPizza(pizza)">Remove all</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

@@ -5,20 +5,21 @@
     <script src="/js/cart.js" defer></script>
     <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-    <title>Pizza Application</title>
+    <title>Cart</title>
 </head>
 <body>
-    <div id="app">
-        <div class="cart-list">
-            List of pizzas inside your cart :
-            {{}}
-        </div>
-        <div class="cart-item" v-for="pizza in pizzas">
+<div id="app">
+    <div class="pizza-list">
+        <div class="pizza-item" v-for="pizza in cart.pizzas">
             {{pizza.label}}<br>
-            Number of pizzas : {{cart.pizzas.length}}<br>
-            <button v-on:click="removeOnePizza(pizza)">Remove one</button>
-            <button v-on:click="removeAllPizza(pizza)">Remove all</button>
+            Number of ingredients :
+            {{pizza.ingredients ? pizza.ingredients.length : 0}}<br>
+            <span v-for="ingredient in pizza.ingredients">
+				{{ingredient.label}}
+			</span><br>
+            <button v-on:click="removePizza(pizza)">Remove</button>
         </div>
     </div>
+</div>
 </body>
 </html>

@@ -10,8 +10,10 @@
 <body>
     <div id="app">
         <div class="cart">
-            Number of pizzas inside the cart :
-            {{cart && cart.pizzas ? cart.pizzas.length : 0}}
+            <a href="/public/cart.html">
+                Number of pizzas inside the cart :
+                {{cart && cart.pizzas ? cart.pizzas.length : 0}}
+            </a>
         </div>
         <div class="pizza-list">
             <div class="pizza-item" v-for="pizza in pizzas">
@@ -19,9 +21,6 @@
                 Number of ingredients : {{pizza.ingredients.length}}<br>
                 <button v-on:click="addPizza(pizza)">Add</button>
             </div>
-        </div>
-        <div class="access-cart">
-            <a href="./public/cart.html">Your cart</a>
         </div>
     </div>
 </body>
